@@ -3,10 +3,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_eyes/app/modules/home/home_store.dart';
+import 'package:my_eyes/app/shareds/circular_button.dart';
+import 'package:my_eyes/app/shareds/custom_colors.dart';
 
 class HomePage extends StatefulWidget {
-  final String title;
-  const HomePage({Key? key, this.title = "Home"}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -17,26 +18,53 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        backgroundColor: Colors.white,
+        actions: [
+          GestureDetector(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Center(
+                child: Text(
+                  "Entrar",
+                  style: GoogleFonts.raleway(
+                    fontWeight: FontWeight.bold,
+                    color: CustomColors.mainBlack,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              Modular.to.pushNamed("login");
+            },
+          )
+        ],
       ),
       body: Observer(
-        builder: (context) => Center(
-          child: Text(
-            '${store.result}',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.raleway(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+        builder: (context) => Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                color: CustomColors.mainBlue,
+              ),
             ),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          store.getTodos();
-        },
-        child: Icon(
-          Icons.send_to_mobile_outlined,
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularButton(
+                      onTap: () {},
+                      text: "Iniciar",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
