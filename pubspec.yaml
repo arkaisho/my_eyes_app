@@ -21,6 +21,7 @@ dependencies:
   json_serializable: ^4.1.0
   dio: ^4.0.1
   build_runner: any
+  slidy: ^3.2.2+2
 
 dev_dependencies:
   flutter_test:

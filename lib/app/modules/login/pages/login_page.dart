@@ -160,7 +160,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onTap: () {
-                          //TODO make route to recover password
+                          Modular.to.pushNamed("/signup");
                         },
                       ),
                     ],
