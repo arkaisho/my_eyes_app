@@ -13,12 +13,16 @@ abstract class _AuthenticationStoreBase with Store {
   final AuthenticationApi api;
   _AuthenticationStoreBase(this.api);
 
+  @observable
+  bool loading = false;
+
   @action
   Future login(
     BuildContext context, {
     required String username,
     required String password,
   }) async {
+    loading = true;
     try {
       var response = await api.login({
         "username": username,
@@ -48,6 +52,7 @@ abstract class _AuthenticationStoreBase with Store {
         );
       }
     }
+    loading = false;
   }
 
   @action

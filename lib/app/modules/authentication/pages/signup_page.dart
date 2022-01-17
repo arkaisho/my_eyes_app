@@ -4,6 +4,7 @@ import 'package:my_eyes/app/modules/authentication/authentication_store.dart';
 import 'package:flutter/material.dart';
 import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
+import 'package:my_eyes/app/shareds/custom_text_form_field.dart';
 
 class SignupPage extends StatefulWidget {
   final String title;
@@ -16,14 +17,12 @@ class SignupPage extends StatefulWidget {
 
 class SignupPageState extends State<SignupPage> {
   final AuthenticationStore store = Modular.get();
-  bool _hidePassword = true;
-  bool _hidePasswordConfirmation = true;
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _passwordConfirmationController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmationController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -74,32 +73,18 @@ class SignupPageState extends State<SignupPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 15),
                       child: Form(
-                        key: _formKey,
+                        key: formKey,
                         child: Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15),
-                              child: TextFormField(
-                                controller: _nameController,
-                                onEditingComplete: () {
-                                  FocusScope.of(context).nextFocus();
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Nome",
-                                  hintStyle: GoogleFonts.raleway(
-                                    color:
-                                        CustomColors.mainBlack.withOpacity(.5),
-                                    fontSize: 14,
-                                  ),
-                                  focusColor: CustomColors.mainBlue,
-                                  hoverColor: CustomColors.mainBlue,
-                                  fillColor: CustomColors.mainBlue,
-                                  prefixIcon: Icon(
-                                    Icons.person_add_disabled,
-                                    color: CustomColors.mainBlue,
-                                  ),
+                              child: CustomTextFormField(
+                                controller: nameController,
+                                hintText: "Nome",
+                                prefixIcon: Icon(
+                                  Icons.person_add_disabled,
+                                  color: CustomColors.mainBlue,
                                 ),
-                                cursorColor: CustomColors.mainBlue,
                                 validator: (value) {
                                   if (value!.isEmpty)
                                     return 'Informe seu nome!';
@@ -109,27 +94,13 @@ class SignupPageState extends State<SignupPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15),
-                              child: TextFormField(
-                                controller: _emailController,
-                                onEditingComplete: () {
-                                  FocusScope.of(context).nextFocus();
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Endereço de e-mail",
-                                  hintStyle: GoogleFonts.raleway(
-                                    color:
-                                        CustomColors.mainBlack.withOpacity(.5),
-                                    fontSize: 14,
-                                  ),
-                                  focusColor: CustomColors.mainBlue,
-                                  hoverColor: CustomColors.mainBlue,
-                                  fillColor: CustomColors.mainBlue,
-                                  prefixIcon: Icon(
-                                    Icons.email,
-                                    color: CustomColors.mainBlue,
-                                  ),
+                              child: CustomTextFormField(
+                                controller: emailController,
+                                hintText: "Endereço de e-mail",
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: CustomColors.mainBlue,
                                 ),
-                                cursorColor: CustomColors.mainBlue,
                                 validator: (value) {
                                   if (value!.isEmpty)
                                     return 'Informe um email!';
@@ -143,27 +114,13 @@ class SignupPageState extends State<SignupPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15),
-                              child: TextFormField(
-                                controller: _usernameController,
-                                onEditingComplete: () {
-                                  FocusScope.of(context).nextFocus();
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Nome de usuário",
-                                  hintStyle: GoogleFonts.raleway(
-                                    color:
-                                        CustomColors.mainBlack.withOpacity(.5),
-                                    fontSize: 14,
-                                  ),
-                                  focusColor: CustomColors.mainBlue,
-                                  hoverColor: CustomColors.mainBlue,
-                                  fillColor: CustomColors.mainBlue,
-                                  prefixIcon: Icon(
-                                    Icons.person,
-                                    color: CustomColors.mainBlue,
-                                  ),
+                              child: CustomTextFormField(
+                                controller: usernameController,
+                                hintText: "Nome de usuário",
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: CustomColors.mainBlue,
                                 ),
-                                cursorColor: CustomColors.mainBlue,
                                 validator: (value) {
                                   if (value!.isEmpty)
                                     return 'Informe o nome de usuário!';
@@ -175,40 +132,14 @@ class SignupPageState extends State<SignupPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15),
-                              child: TextFormField(
-                                controller: _passwordController,
-                                onEditingComplete: () {
-                                  FocusScope.of(context).nextFocus();
-                                },
-                                obscureText: _hidePassword,
-                                decoration: InputDecoration(
-                                  hintText: 'Senha',
-                                  hintStyle: GoogleFonts.raleway(
-                                    color:
-                                        CustomColors.mainBlack.withOpacity(.5),
-                                    fontSize: 14,
-                                  ),
-                                  focusColor: CustomColors.mainBlue,
-                                  hoverColor: CustomColors.mainBlue,
-                                  fillColor: CustomColors.mainBlue,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _hidePassword
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _hidePassword = !_hidePassword;
-                                      });
-                                    },
-                                  ),
-                                  prefixIcon: Icon(
-                                    Icons.lock,
-                                    color: CustomColors.mainBlue,
-                                  ),
+                              child: CustomTextFormField(
+                                controller: passwordController,
+                                hintText: 'Senha',
+                                isPassword: true,
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: CustomColors.mainBlue,
                                 ),
-                                cursorColor: CustomColors.mainBlue,
                                 validator: (value) {
                                   if (value!.isEmpty)
                                     return 'informe sua senha!';
@@ -220,45 +151,18 @@ class SignupPageState extends State<SignupPage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15),
-                              child: TextFormField(
-                                controller: _passwordConfirmationController,
-                                obscureText: _hidePasswordConfirmation,
-                                onEditingComplete: () {
-                                  FocusScope.of(context).nextFocus();
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Confirmação da senha",
-                                  hintStyle: GoogleFonts.raleway(
-                                    color:
-                                        CustomColors.mainBlack.withOpacity(.5),
-                                    fontSize: 14,
-                                  ),
-                                  focusColor: CustomColors.mainBlue,
-                                  hoverColor: CustomColors.mainBlue,
-                                  fillColor: CustomColors.mainBlue,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _hidePasswordConfirmation
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _hidePasswordConfirmation =
-                                            !_hidePasswordConfirmation;
-                                      });
-                                    },
-                                  ),
-                                  prefixIcon: Icon(
-                                    Icons.lock,
-                                    color: CustomColors.mainBlue,
-                                  ),
+                              child: CustomTextFormField(
+                                controller: passwordConfirmationController,
+                                hintText: "Confirmação da senha",
+                                isPassword: true,
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: CustomColors.mainBlue,
                                 ),
-                                cursorColor: CustomColors.mainBlue,
                                 validator: (value) {
                                   if (value!.isEmpty)
                                     return 'confirme sua senha!';
-                                  if (value != _passwordController.text)
+                                  if (value != passwordController.text)
                                     return 'As senhas não coincidem!';
                                 },
                               ),
@@ -275,17 +179,17 @@ class SignupPageState extends State<SignupPage> {
                                         child: CircularButton(
                                           text: "Cadastro",
                                           onTap: () async {
-                                            if (_formKey.currentState!
+                                            if (formKey.currentState!
                                                 .validate()) {
                                               await store.register(
                                                 context,
-                                                email: _emailController.text,
+                                                email: emailController.text,
                                                 username:
-                                                    _usernameController.text,
+                                                    usernameController.text,
                                                 password:
-                                                    _passwordController.text,
+                                                    passwordController.text,
                                                 confirmPassword:
-                                                    _passwordConfirmationController
+                                                    passwordConfirmationController
                                                         .text,
                                               );
                                             }

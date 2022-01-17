@@ -25,7 +25,6 @@ class CircularButton extends StatelessWidget {
             child: Text(
               text,
               style: GoogleFonts.raleway(
-                decoration: TextDecoration.underline,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 fontSize: 16,
