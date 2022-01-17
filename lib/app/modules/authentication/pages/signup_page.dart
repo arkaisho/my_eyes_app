@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_eyes/app/modules/signup/signup_store.dart';
+import 'package:my_eyes/app/modules/authentication/authentication_store.dart';
 import 'package:flutter/material.dart';
 import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
@@ -15,7 +15,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class SignupPageState extends State<SignupPage> {
-  final SignupStore store = Modular.get();
+  final AuthenticationStore store = Modular.get();
   bool _hidePassword = true;
   bool _hidePasswordConfirmation = true;
   final _nameController = TextEditingController();
@@ -81,6 +81,9 @@ class SignupPageState extends State<SignupPage> {
                               padding: const EdgeInsets.only(bottom: 15),
                               child: TextFormField(
                                 controller: _nameController,
+                                onEditingComplete: () {
+                                  FocusScope.of(context).nextFocus();
+                                },
                                 decoration: InputDecoration(
                                   hintText: "Nome",
                                   hintStyle: GoogleFonts.raleway(
@@ -108,6 +111,9 @@ class SignupPageState extends State<SignupPage> {
                               padding: const EdgeInsets.only(bottom: 15),
                               child: TextFormField(
                                 controller: _emailController,
+                                onEditingComplete: () {
+                                  FocusScope.of(context).nextFocus();
+                                },
                                 decoration: InputDecoration(
                                   hintText: "Endereço de e-mail",
                                   hintStyle: GoogleFonts.raleway(
@@ -139,6 +145,9 @@ class SignupPageState extends State<SignupPage> {
                               padding: const EdgeInsets.only(bottom: 15),
                               child: TextFormField(
                                 controller: _usernameController,
+                                onEditingComplete: () {
+                                  FocusScope.of(context).nextFocus();
+                                },
                                 decoration: InputDecoration(
                                   hintText: "Nome de usuário",
                                   hintStyle: GoogleFonts.raleway(
@@ -168,6 +177,9 @@ class SignupPageState extends State<SignupPage> {
                               padding: const EdgeInsets.only(bottom: 15),
                               child: TextFormField(
                                 controller: _passwordController,
+                                onEditingComplete: () {
+                                  FocusScope.of(context).nextFocus();
+                                },
                                 obscureText: _hidePassword,
                                 decoration: InputDecoration(
                                   hintText: 'Senha',
@@ -182,8 +194,8 @@ class SignupPageState extends State<SignupPage> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _hidePassword
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
                                     ),
                                     onPressed: () {
                                       setState(() {
@@ -211,6 +223,9 @@ class SignupPageState extends State<SignupPage> {
                               child: TextFormField(
                                 controller: _passwordConfirmationController,
                                 obscureText: _hidePasswordConfirmation,
+                                onEditingComplete: () {
+                                  FocusScope.of(context).nextFocus();
+                                },
                                 decoration: InputDecoration(
                                   hintText: "Confirmação da senha",
                                   hintStyle: GoogleFonts.raleway(
@@ -224,8 +239,8 @@ class SignupPageState extends State<SignupPage> {
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _hidePasswordConfirmation
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
                                     ),
                                     onPressed: () {
                                       setState(() {
@@ -243,47 +258,45 @@ class SignupPageState extends State<SignupPage> {
                                 validator: (value) {
                                   if (value!.isEmpty)
                                     return 'confirme sua senha!';
-                                  if (value !=
-                                      _passwordController.text)
+                                  if (value != _passwordController.text)
                                     return 'As senhas não coincidem!';
                                 },
                               ),
                             ),
                             Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 30, top: 30),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                              padding:
+                                  const EdgeInsets.only(bottom: 30, top: 30),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: CircularButton(
-                                              text: "Cadastro",
-                                              onTap: () {
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      backgroundColor:
-                                                          Colors.greenAccent,
-                                                      content: Text(
-                                                        'Tudo OK',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        ],
+                                      Expanded(
+                                        child: CircularButton(
+                                          text: "Cadastro",
+                                          onTap: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              await store.register(
+                                                context,
+                                                email: _emailController.text,
+                                                username:
+                                                    _usernameController.text,
+                                                password:
+                                                    _passwordController.text,
+                                                confirmPassword:
+                                                    _passwordConfirmationController
+                                                        .text,
+                                              );
+                                            }
+                                          },
+                                        ),
                                       ),
-                                    ])),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -318,7 +331,7 @@ class SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                               onTap: () {
-                                Modular.to.pushNamed("/login");
+                                Modular.to.pop();
                               },
                             ),
                           ],

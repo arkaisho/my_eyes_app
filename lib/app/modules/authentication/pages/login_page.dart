@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_eyes/app/modules/login/login_store.dart';
 import 'package:flutter/material.dart';
+import 'package:my_eyes/app/modules/authentication/authentication_store.dart';
 import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 
@@ -13,7 +13,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  final LoginStore store = Modular.get();
+  final AuthenticationStore store = Modular.get();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,10 @@ class LoginPageState extends State<LoginPage> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 15),
                                 child: TextFormField(
+                                  controller: usernameController,
+                                  onEditingComplete: () {
+                                    FocusScope.of(context).nextFocus();
+                                  },
                                   decoration: InputDecoration(
                                     hintText: "Usuário ou email",
                                     hintStyle: GoogleFonts.raleway(
@@ -91,6 +97,10 @@ class LoginPageState extends State<LoginPage> {
                                 padding: const EdgeInsets.only(bottom: 15),
                                 child: TextFormField(
                                   obscureText: true,
+                                  controller: passwordController,
+                                  onEditingComplete: () {
+                                    FocusScope.of(context).nextFocus();
+                                  },
                                   decoration: InputDecoration(
                                     hintText: "Senha",
                                     hintStyle: GoogleFonts.raleway(
@@ -121,7 +131,7 @@ class LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onTap: () {
-                            //TODO make route to recover password
+                            Modular.to.pushNamed("recover_password");
                           },
                         ),
                       ),
@@ -132,8 +142,12 @@ class LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: CircularButton(
                           text: "Entrar",
-                          onTap: () {
-                            //TODO make route to recover profile
+                          onTap: () async {
+                            await store.login(
+                              context,
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            );
                           },
                         ),
                       ),
@@ -160,7 +174,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onTap: () {
-                          Modular.to.pushNamed("/signup");
+                          Modular.to.pushNamed("sign_up");
                         },
                       ),
                     ],
