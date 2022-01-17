@@ -62,12 +62,9 @@ class ProductsPageState extends State<ProductsPage> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              children: [
-                ProductTile(),
-                ProductTile(),
-                ProductTile(),
-                ProductTile(),
-              ],
+              children: store.productList
+                  .map((product) => ProductTile(product: product))
+                  .toList(),
             ),
           ),
         );

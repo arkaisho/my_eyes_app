@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_eyes/app/models/product.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 
 class ProductTile extends StatelessWidget {
+  final Product product;
+
   const ProductTile({
+    required this.product,
     Key? key,
   }) : super(key: key);
 
@@ -22,7 +27,7 @@ class ProductTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Product name",
+                    product.name.toString(),
                     style: GoogleFonts.raleway(
                       fontWeight: FontWeight.bold,
                       color: CustomColors.mainBlack,
@@ -31,7 +36,7 @@ class ProductTile extends StatelessWidget {
                   ),
                   Container(height: 5),
                   Text(
-                    "Product description",
+                    product.description.toString(),
                     style: GoogleFonts.raleway(
                       color: CustomColors.mainBlack.withOpacity(.8),
                       fontSize: 12,
@@ -41,23 +46,33 @@ class ProductTile extends StatelessWidget {
               ),
             ),
           ),
-          CircleAvatar(
-            backgroundColor: CustomColors.mainBlue,
-            radius: 15,
-            child: Icon(
-              Icons.edit,
-              size: 15,
-              color: Colors.white,
+          GestureDetector(
+            onTap: () {
+              Modular.to.pushNamed("product_edition");
+            },
+            child: CircleAvatar(
+              backgroundColor: CustomColors.mainBlue,
+              radius: 15,
+              child: Icon(
+                Icons.edit,
+                size: 15,
+                color: Colors.white,
+              ),
             ),
           ),
           Container(width: 10),
-          CircleAvatar(
-            backgroundColor: CustomColors.mainBlue,
-            radius: 15,
-            child: Icon(
-              Icons.delete,
-              size: 15,
-              color: Colors.white,
+          GestureDetector(
+            onTap: () {
+              //create store delete
+            },
+            child: CircleAvatar(
+              backgroundColor: CustomColors.mainBlue,
+              radius: 15,
+              child: Icon(
+                Icons.delete,
+                size: 15,
+                color: Colors.white,
+              ),
             ),
           )
         ],
