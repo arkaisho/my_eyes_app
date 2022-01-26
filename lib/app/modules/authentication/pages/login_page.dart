@@ -9,7 +9,9 @@ import 'package:my_eyes/app/shareds/custom_text_form_field.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
+
   const LoginPage({Key? key, this.title = 'LoginPage'}) : super(key: key);
+
   @override
   LoginPageState createState() => LoginPageState();
 }
@@ -18,6 +20,7 @@ class LoginPageState extends State<LoginPage> {
   final AuthenticationStore store = Modular.get();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +38,10 @@ class LoginPageState extends State<LoginPage> {
             },
           ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: true,
-              child: Padding(
+        body: SingleChildScrollView(
+          child: Stack(children: <Widget>[
+            Column(children: [
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,93 +75,138 @@ class LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Form(
-                            child: Column(
-                              children: [
-                                CustomTextFormField(
-                                  controller: usernameController,
-                                  hintText: "Nome de usuario",
-                                  prefixIcon: Icon(
-                                    Icons.person,
+                            child: Form(
+                              key: formKey,
+                              child: Column(
+                                children: [
+                                  CustomTextFormField(
+                                    controller: usernameController,
+                                    hintText: "Nome de usuario",
+                                    prefixIcon: Icon(
+                                      Icons.person,
+                                      color: CustomColors.mainBlue,
+                                    ),
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return 'Informe um nome de usuário!';
+                                      return null;
+                                    },
+                                  ),
+                                  CustomTextFormField(
+                                    controller: passwordController,
+                                    hintText: "Senha",
+                                    isPassword: true,
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return 'Informe uma senha!';
+                                      return null;
+                                    },
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 30, top: 30),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            store.loading
+                                                ? CircularProgressIndicator()
+                                                : Expanded(
+                                                    child: CircularButton(
+                                                      text: "Entrar",
+                                                      onTap: () async {
+                                                        if (formKey
+                                                            .currentState!
+                                                            .validate()) {
+                                                          await store.login(
+                                                            context,
+                                                            username:
+                                                                usernameController
+                                                                    .text,
+                                                            password:
+                                                                passwordController
+                                                                    .text,
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                child: Text(
+                                  "Esqueceu sua senha?",
+                                  style: GoogleFonts.raleway(
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
                                     color: CustomColors.mainBlue,
+                                    fontSize: 14,
                                   ),
                                 ),
-                                CustomTextFormField(
-                                  controller: passwordController,
-                                  hintText: "Senha",
-                                  isPassword: true,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: InkWell(
-                            child: Text(
-                              "Esqueceu sua senha?",
-                              style: GoogleFonts.raleway(
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.bold,
-                                color: CustomColors.mainBlue,
-                                fontSize: 14,
+                                onTap: () {
+                                  Modular.to.pushNamed("recover_password");
+                                },
                               ),
-                            ),
-                            onTap: () {
-                              Modular.to.pushNamed("recover_password");
-                            },
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        store.loading
-                            ? CircularProgressIndicator()
-                            : Expanded(
-                                child: CircularButton(
-                                  text: "Entrar",
-                                  onTap: () async {
-                                    await store.login(
-                                      context,
-                                      username: usernameController.text,
-                                      password: passwordController.text,
-                                    );
-                                  },
-                                ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Novo por aqui?",
+                                    style: GoogleFonts.raleway(
+                                      decoration: TextDecoration.underline,
+                                      color: CustomColors.mainBlack
+                                          .withOpacity(.5),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  InkWell(
+                                    child: Text(
+                                      " Cadastre-se",
+                                      style: GoogleFonts.raleway(
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.bold,
+                                        color: CustomColors.mainBlue,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Modular.to.pushNamed("sign_up");
+                                    },
+                                  ),
+                                ],
                               ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Novo por aqui?",
-                          style: GoogleFonts.raleway(
-                            decoration: TextDecoration.underline,
-                            color: CustomColors.mainBlack.withOpacity(.5),
-                            fontSize: 14,
+                            ],
                           ),
-                        ),
-                        InkWell(
-                          child: Text(
-                            " Cadastre-se",
-                            style: GoogleFonts.raleway(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              color: CustomColors.mainBlue,
-                              fontSize: 14,
-                            ),
-                          ),
-                          onTap: () {
-                            Modular.to.pushNamed("sign_up");
-                          },
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-            )
-          ],
+            ]),
+          ]),
         ),
       );
     });

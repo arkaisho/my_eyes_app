@@ -83,14 +83,6 @@ class ProductEditionPageState extends State<ProductEditionPage> {
                       color: CustomColors.mainBlue,
                     ),
                   ),
-                  CustomTextFormField(
-                    controller: categoryController,
-                    hintText: "Categoria",
-                    prefixIcon: Icon(
-                      Icons.category,
-                      color: CustomColors.mainBlue,
-                    ),
-                  ),
                 ],
               ),
               Positioned(

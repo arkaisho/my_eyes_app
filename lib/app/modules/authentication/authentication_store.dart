@@ -11,6 +11,7 @@ class AuthenticationStore = _AuthenticationStoreBase with _$AuthenticationStore;
 
 abstract class _AuthenticationStoreBase with Store {
   final AuthenticationApi api;
+
   _AuthenticationStoreBase(this.api);
 
   @observable
@@ -59,16 +60,21 @@ abstract class _AuthenticationStoreBase with Store {
   Future register(
     BuildContext context, {
     required String email,
+    required String name,
     required String username,
     required String password,
     required String confirmPassword,
   }) async {
+    loading = true;
     try {
       await api.register({
-        "username": username,
-        "email": email,
-        "password": password,
-        "re_password": confirmPassword,
+        "user": {
+          "name": name,
+          "username": username,
+          "email": email,
+          "password": password,
+          "re_password": confirmPassword,
+        }
       });
       Modular.to.pop();
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -79,14 +85,18 @@ abstract class _AuthenticationStoreBase with Store {
         ),
       );
     } catch (e) {
+      if (e.runtimeType == DioError) {
+        print((e as DioError).response);
+      }
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erro ao fazer login."),
+          content: Text("Erro ao realizar cadastro."),
           backgroundColor: Colors.red,
         ),
       );
     }
+    loading = false;
   }
 
   @action
@@ -113,6 +123,17 @@ abstract class _AuthenticationStoreBase with Store {
           backgroundColor: Colors.red,
         ),
       );
+    }
+  }
+
+  @action
+  Future me() async {
+    try {
+      final token = await Authentication.getToken();
+      var response = await api.me({'AUTHOZIRATION': 'JWT ' + token!});
+      return response.data;
+    } catch (e) {
+      return null;
     }
   }
 }

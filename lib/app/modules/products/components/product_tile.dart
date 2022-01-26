@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_eyes/app/models/product.dart';
+import 'package:my_eyes/app/modules/products/pages/products_page.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
+
+import '../products_store.dart';
 
 class ProductTile extends StatelessWidget {
   final Product product;
@@ -63,7 +66,8 @@ class ProductTile extends StatelessWidget {
           Container(width: 10),
           GestureDetector(
             onTap: () {
-              //create store delete
+              final store = Modular.get<ProductsStore>();
+              store.deleteProduct(context, slug: '${product.slug}');
             },
             child: CircleAvatar(
               backgroundColor: CustomColors.mainBlue,
