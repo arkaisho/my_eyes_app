@@ -107,6 +107,56 @@ abstract class _ProductsStoreBase with Store {
     loading = false;
   }
 
+  // create a action to update a product
+  @action
+  Future updateProduct(BuildContext context,
+      {required String name,
+      required String slug,
+      required String price,
+      required String description,
+      required int id}) async {
+    loading = true;
+    try {
+      var responseMe = await authenticationStore.me();
+      if (responseMe['id'] == null) return;
+
+      var responseShop = await api.getShopByUserId(responseMe['id']);
+
+      var payload = {
+        "id": id,
+        "name": name,
+        "price": price,
+        "description": description,
+        "shop": responseShop.data['id']
+      };
+
+      var response = await api.updateProduct(slug, payload);
+      this.productList.removeWhere((product) => product.id == id);
+      this.productList.add(Product.fromJson(response.data));
+      Modular.to.pop();
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Produto atualizado com sucesso."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (e) {
+      if (e.runtimeType == DioError) {
+        print((e as DioError).response!);
+      } else {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erro ao fazer atualizar produto."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+    loading = false;
+  }
+
   @action
   Future deleteProduct(BuildContext context, {required String slug}) async {
     loading = true;

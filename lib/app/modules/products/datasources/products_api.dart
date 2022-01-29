@@ -17,6 +17,10 @@ abstract class ProductsApi {
   @Header(JSON_HEADER)
   Future<HttpResponse> saveProduct(@Body() Map<String, dynamic> body);
 
+  @PUT("/api/v1/products/{slug}/update/")
+  @Header(JSON_HEADER)
+  Future<HttpResponse> updateProduct(@Path("slug") String slug, @Body() Map<String, dynamic> body);
+
   @DELETE("/api/v1/products/{slug}/delete/")
   @Header(JSON_HEADER)
   Future<HttpResponse> deleteProduct(@Path("slug") String slug);

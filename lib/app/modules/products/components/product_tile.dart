@@ -51,7 +51,10 @@ class ProductTile extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Modular.to.pushNamed("product_edition");
+              Modular.to.pushNamed(
+                'product_edition',
+                arguments: {'product': product},
+              );
             },
             child: CircleAvatar(
               backgroundColor: CustomColors.mainBlue,
