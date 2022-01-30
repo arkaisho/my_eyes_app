@@ -15,6 +15,8 @@ class ProductsPage extends StatefulWidget {
 class ProductsPageState extends State<ProductsPage> {
   final ProductsStore store = Modular.get();
 
+  int currentIndex = 0;
+
   @override
   void didChangeDependencies() {
     store.products(context);
@@ -28,7 +30,7 @@ class ProductsPageState extends State<ProductsPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          "Produtos",
+          "Meus produtos",
           style: GoogleFonts.raleway(
             fontWeight: FontWeight.bold,
             color: CustomColors.mainBlue,
@@ -36,15 +38,17 @@ class ProductsPageState extends State<ProductsPage> {
           ),
         ),
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            Modular.to.pop();
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: CustomColors.mainBlue,
-          ),
-        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() => currentIndex = index),
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.format_list_bulleted), title: Container()),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), title: Container()),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

@@ -1,5 +1,6 @@
 import 'package:my_eyes/app/modules/products/datasources/products_api.dart';
 import 'package:my_eyes/app/modules/products/pages/product_creation_page.dart';
+import 'package:my_eyes/app/modules/products/pages/product_details_page.dart';
 import 'package:my_eyes/app/modules/products/pages/product_edition_page.dart';
 import 'package:my_eyes/app/modules/products/pages/products_page.dart';
 import 'package:my_eyes/app/modules/products/products_store.dart';
@@ -18,5 +19,6 @@ class ProductsModule extends Module {
     ChildRoute('/', child: (_, args) => ProductsPage()),
     ChildRoute('/product_creation', child: (_, args) => ProductCreationPage()),
     ChildRoute('/product_edition', child: (_, args) => ProductEditionPage()),
+    ChildRoute('/product_details', child: (_, args) => ProductDetailsPage()),
   ];
 }

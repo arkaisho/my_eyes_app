@@ -28,4 +28,8 @@ abstract class ProductsApi {
   @GET("/api/v1/shops/user/{id}/")
   @Header(JSON_HEADER)
   Future<HttpResponse> getShopByUserId(@Path() int id);
+
+  @GET("/api/v1/products/{slug}/qr-code/download")
+  @Header(JSON_HEADER)
+  Future<HttpResponse> downloadQrCode(@Path("slug") String slug);
 }

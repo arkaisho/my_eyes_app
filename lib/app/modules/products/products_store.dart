@@ -188,4 +188,38 @@ abstract class _ProductsStoreBase with Store {
     }
     loading = false;
   }
+
+  // create a action to download the qr code pdf
+  @action
+  Future downloadQrCode(BuildContext context, {required String slug}) async {
+    loading = true;
+    try {
+      var response = await api.downloadQrCode(slug);
+      final bytes = response.data;
+      // String dir = (await getApplicationDocumentsDirectory()).path;
+      // File file = new File('$dir/$filename');
+      // await file.writeAsBytes(bytes);
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Qr code baixado com sucesso."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (e) {
+      if (e.runtimeType == DioError) {
+        print((e as DioError).response!);
+      } else {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Erro ao baixar qr code."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+    loading = false;
+  }
 }
