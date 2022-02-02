@@ -1,10 +1,9 @@
 import 'dart:convert';
-
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_eyes/app/modules/products/products_store.dart';
 import 'package:flutter/material.dart';
+import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -26,8 +25,7 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
-    var product = arguments['product'];
+    final ProductsStore store = Modular.get();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,84 +50,101 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.format_list_bulleted), title: Container()),
-          BottomNavigationBarItem(icon: Icon(Icons.person), title: Container()),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-        child: Stack(children: [
-          Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Nome: ${product.name}",
-                style: GoogleFonts.raleway(
-                  fontWeight: FontWeight.bold,
-                  color: CustomColors.mainBlue,
-                  fontSize: 20,
-                ),
+              Row(
+                children: [
+                  Text(
+                    "Nome:  ",
+                    style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.bold,
+                      color: CustomColors.mainBlue,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    "${store.product.name}",
+                    style: GoogleFonts.raleway(
+                      color: CustomColors.mainBlue,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 10),
-              Text(
-                "Descrição: ${product.description}",
-                style: GoogleFonts.raleway(
-                  fontWeight: FontWeight.bold,
-                  color: CustomColors.mainBlue,
-                  fontSize: 20,
-                ),
+              Row(
+                children: [
+                  Text(
+                    "Descrição:  ",
+                    style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.bold,
+                      color: CustomColors.mainBlue,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    "${store.product.description}",
+                    style: GoogleFonts.raleway(
+                      color: CustomColors.mainBlue,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 10),
-              Text(
-                "Preço: R\$ ${product.price}",
-                style: GoogleFonts.raleway(
-                  fontWeight: FontWeight.bold,
-                  color: CustomColors.mainBlue,
-                  fontSize: 20,
-                ),
+              Row(
+                children: [
+                  Text(
+                    "Preço: R\$  ",
+                    style: GoogleFonts.raleway(
+                      fontWeight: FontWeight.bold,
+                      color: CustomColors.mainBlue,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    "${store.product.price}",
+                    style: GoogleFonts.raleway(
+                      color: CustomColors.mainBlue,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          // Create a center-aligned image from base64 present in product.base_64_qr_code
-          // the image must be resized to fit the screen with a padding top 50
-          Padding(
-            padding: EdgeInsets.only(top: 110),
-            child: Align(
-                alignment: Alignment.center,
-                child: Image.memory(
-                  base64Decode(product.base_64_qr_code),
-                  height: 250,
-                  width: 250,
-                )),
-          ),
-          // create a button to download the qr code
-          // the button must be positioned at the bottom of the screen with a padding bottom 50
-          Padding(
-            padding: EdgeInsets.only(top: 80),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: RaisedButton(
-                onPressed: () {
-                  store.downloadQrCode(context, slug: product.slug);
-                },
-                child: Text(
-                  "Baixar código QR",
-                  style: GoogleFonts.raleway(
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.mainBlue,
-                    fontSize: 20,
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Image.memory(
+                    base64Decode(store.product.base_64_qr_code.toString()),
+                    height: 250,
+                    width: 250,
                   ),
                 ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(top: 80),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CircularButton(
+                    onTap: () {
+                      store.downloadQrCode(
+                        context,
+                        slug: store.product.slug.toString(),
+                      );
+                    },
+                    text: "Baixar código QR",
+                  ),
+                ),
+              ),
+              Container(height: 50),
+            ],
           ),
-        ]),
+        ),
       ),
     );
   }

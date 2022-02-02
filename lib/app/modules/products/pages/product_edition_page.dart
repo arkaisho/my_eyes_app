@@ -26,16 +26,13 @@ class ProductEditionPageState extends State<ProductEditionPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    nameController.text = store.product.name.toString();
+    priceController.text = store.product.price.toString();
+    descriptionController.text = store.product.description.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
-    var product = arguments['product'];
-    nameController.text = product.name;
-    priceController.text = product.price.toString();
-    descriptionController.text = product.description;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -62,7 +59,7 @@ class ProductEditionPageState extends State<ProductEditionPage> {
       body: Observer(builder: (context) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Stack(
+          child: Column(
             children: [
               Form(
                 key: formKey,
@@ -111,29 +108,30 @@ class ProductEditionPageState extends State<ProductEditionPage> {
                   ],
                 ),
               ),
-              Positioned(
-                bottom: 30,
-                left: 30,
-                right: 30,
+              Padding(
+                padding: EdgeInsets.only(top: 30),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: CircularButton(
-                        text: "Salvar",
-                        onTap: () async {
-                          if (formKey.currentState!.validate()) {
-                            await store.updateProduct(
-                              context,
-                              id: product.id,
-                              slug: product.slug,
-                              name: nameController.text,
-                              price: priceController.text,
-                              description: descriptionController.text,
-                            );
-                          }
-                        },
-                      ),
-                    ),
+                    store.loading
+                        ? CircularProgressIndicator()
+                        : Expanded(
+                            child: CircularButton(
+                              text: "Salvar",
+                              onTap: () async {
+                                if (formKey.currentState!.validate()) {
+                                  await store.updateProduct(
+                                    context,
+                                    id: store.product.id!,
+                                    slug: store.product.slug.toString(),
+                                    name: nameController.text,
+                                    price: priceController.text,
+                                    description: descriptionController.text,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
                   ],
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:my_eyes/app/modules/authentication/datasources/authentication_api.dart';
 import 'package:my_eyes/app/utils/authentication.dart';
+import 'package:my_eyes/app/utils/error_messager.dart';
 
 part 'authentication_store.g.dart';
 
@@ -31,27 +32,14 @@ abstract class _AuthenticationStoreBase with Store {
       });
       await Authentication.saveToken(response.data['access'].toString());
       if (await Authentication.authenticated())
-        Modular.to.pushNamed("/products");
+        Modular.to.pushReplacementNamed("/products");
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        if ((e as DioError).response!.statusCode == 401) {
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Credenciais inválidas."),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao fazer login."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao realizar login",
+        onlyDefault: true,
+      );
     }
     loading = false;
   }
@@ -85,15 +73,10 @@ abstract class _AuthenticationStoreBase with Store {
         ),
       );
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        print((e as DioError).response);
-      }
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Erro ao realizar cadastro."),
-          backgroundColor: Colors.red,
-        ),
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao realizar cadastro",
       );
     }
     loading = false;
@@ -108,6 +91,7 @@ abstract class _AuthenticationStoreBase with Store {
       await api.recoverPassword({
         "email": email,
       });
+      Modular.to.pop();
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -116,12 +100,10 @@ abstract class _AuthenticationStoreBase with Store {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Erro ao tentar recuperar a senha."),
-          backgroundColor: Colors.red,
-        ),
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao recuperar senha",
       );
     }
   }

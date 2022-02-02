@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_eyes/app/modules/products/components/product_tile.dart';
 import 'package:my_eyes/app/modules/products/products_store.dart';
 import 'package:flutter/material.dart';
+import 'package:my_eyes/app/shareds/custom_bottom_navigation_bar.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -39,37 +40,39 @@ class ProductsPageState extends State<ProductsPage> {
         ),
         automaticallyImplyLeading: false,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.format_list_bulleted), title: Container()),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Container()),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: CustomColors.mainBlue,
-        onPressed: () {
-          Modular.to.pushNamed("product_creation");
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 80),
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          backgroundColor: CustomColors.mainBlue,
+          onPressed: () {
+            Modular.to.pushNamed("product_creation");
+          },
+        ),
       ),
       body: Observer(builder: (context) {
         return RefreshIndicator(
           onRefresh: () async {
             await store.products(context);
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: store.productList
-                  .map((product) => ProductTile(product: product))
-                  .toList(),
-            ),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: store.productList
+                      .map((product) => ProductTile(product: product))
+                      .toList(),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: CustomBottomNavigationBar(),
+              ),
+            ],
           ),
         );
       }),

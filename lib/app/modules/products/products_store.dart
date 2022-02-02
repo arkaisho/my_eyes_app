@@ -1,10 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:my_eyes/app/models/product.dart';
 import 'package:my_eyes/app/modules/authentication/authentication_store.dart';
 import 'package:my_eyes/app/modules/products/datasources/products_api.dart';
+import 'package:my_eyes/app/utils/error_messager.dart';
 
 part 'products_store.g.dart';
 
@@ -17,10 +17,16 @@ abstract class _ProductsStoreBase with Store {
   _ProductsStoreBase(this.api);
 
   @observable
+  Product product = Product();
+
+  @observable
   bool loading = false;
 
   @observable
   ObservableList<Product> productList = ObservableList.of([]);
+
+  @action
+  Future setProduct(Product product) async => this.product = product;
 
   @action
   Future products(BuildContext context) async {
@@ -40,25 +46,11 @@ abstract class _ProductsStoreBase with Store {
         );
       }
     } catch (e) {
-      print(e);
-      if (e.runtimeType == DioError) {
-        if ((e as DioError).response!.statusCode == 401) {
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Credenciais inválidas."),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao carregar lista de produtos."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao carregar lista de produtos",
+      );
     }
     loading = false;
   }
@@ -88,33 +80,29 @@ abstract class _ProductsStoreBase with Store {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Produto adicionado com sucesso."),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        print((e as DioError).response!);
-      } else {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao fazer cadastrar produto."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao cadastrar produto",
+      );
     }
     loading = false;
   }
 
   // create a action to update a product
   @action
-  Future updateProduct(BuildContext context,
-      {required String name,
-      required String slug,
-      required String price,
-      required String description,
-      required int id}) async {
+  Future updateProduct(
+    BuildContext context, {
+    required String name,
+    required String slug,
+    required String price,
+    required String description,
+    required int id,
+  }) async {
     loading = true;
     try {
       var responseMe = await authenticationStore.me();
@@ -138,21 +126,15 @@ abstract class _ProductsStoreBase with Store {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Produto atualizado com sucesso."),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        print((e as DioError).response!);
-      } else {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao fazer atualizar produto."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao atualizar produto",
+      );
     }
     loading = false;
   }
@@ -170,21 +152,15 @@ abstract class _ProductsStoreBase with Store {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Produto removido com sucesso."),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        print((e as DioError).response!);
-      } else {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao remover produto."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao remover produto",
+      );
     }
     loading = false;
   }
@@ -204,21 +180,15 @@ abstract class _ProductsStoreBase with Store {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Qr code baixado com sucesso."),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
         ),
       );
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        print((e as DioError).response!);
-      } else {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao baixar qr code."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao baixar QR-Code",
+      );
     }
     loading = false;
   }

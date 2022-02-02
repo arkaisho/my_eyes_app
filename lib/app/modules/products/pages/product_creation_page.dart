@@ -109,6 +109,7 @@ class ProductCreationPageState extends State<ProductCreationPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 store.loading
                                     ? CircularProgressIndicator()

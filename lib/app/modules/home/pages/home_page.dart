@@ -36,7 +36,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
             ),
             onTap: () {
-              Modular.to.pushNamed("login");
+              Modular.to.pushReplacementNamed("login");
             },
           )
         ],

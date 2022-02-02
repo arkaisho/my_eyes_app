@@ -84,7 +84,7 @@ class SignupPageState extends State<SignupPage> {
                                   controller: nameController,
                                   hintText: "Nome",
                                   prefixIcon: Icon(
-                                    Icons.person_add_disabled,
+                                    Icons.person_outline,
                                     color: CustomColors.mainBlue,
                                   ),
                                   validator: (value) {
@@ -100,7 +100,7 @@ class SignupPageState extends State<SignupPage> {
                                   controller: emailController,
                                   hintText: "Endereço de e-mail",
                                   prefixIcon: Icon(
-                                    Icons.email,
+                                    Icons.email_outlined,
                                     color: CustomColors.mainBlue,
                                   ),
                                   validator: (value) {
@@ -120,7 +120,7 @@ class SignupPageState extends State<SignupPage> {
                                   controller: usernameController,
                                   hintText: "Nome de usuário",
                                   prefixIcon: Icon(
-                                    Icons.person,
+                                    Icons.text_fields_outlined,
                                     color: CustomColors.mainBlue,
                                   ),
                                   validator: (value) {
@@ -139,7 +139,7 @@ class SignupPageState extends State<SignupPage> {
                                   hintText: 'Senha',
                                   isPassword: true,
                                   prefixIcon: Icon(
-                                    Icons.lock,
+                                    Icons.lock_outline,
                                     color: CustomColors.mainBlue,
                                   ),
                                   validator: (value) {
@@ -158,7 +158,7 @@ class SignupPageState extends State<SignupPage> {
                                   hintText: "Confirmação da senha",
                                   isPassword: true,
                                   prefixIcon: Icon(
-                                    Icons.lock,
+                                    Icons.lock_outline,
                                     color: CustomColors.mainBlue,
                                   ),
                                   validator: (value) {
