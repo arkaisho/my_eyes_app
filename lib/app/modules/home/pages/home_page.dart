@@ -21,6 +21,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         backgroundColor: Colors.white,
         actions: [
           GestureDetector(
+            behavior: HitTestBehavior.translucent,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Center(
@@ -35,7 +36,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               ),
             ),
             onTap: () {
-              Modular.to.pushNamed("login");
+              Modular.to.pushReplacementNamed("login");
             },
           )
         ],
