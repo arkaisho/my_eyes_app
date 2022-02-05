@@ -52,68 +52,114 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+          padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(
-                    "Nome:  ",
-                    style: GoogleFonts.raleway(
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.mainBlue,
-                      fontSize: 20,
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Nome',
+                        style: GoogleFonts.raleway(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.mainBlue,
+                          fontSize: 20,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    "${store.product.name}",
-                    style: GoogleFonts.raleway(
-                      color: CustomColors.mainBlue,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    "Descrição:  ",
-                    style: GoogleFonts.raleway(
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.mainBlue,
-                      fontSize: 20,
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "${store.product.name}",
+                        style: GoogleFonts.raleway(
+                          color: CustomColors.mainBlue,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    "${store.product.description}",
-                    style: GoogleFonts.raleway(
-                      color: CustomColors.mainBlue,
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    "Preço: R\$  ",
-                    style: GoogleFonts.raleway(
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.mainBlue,
-                      fontSize: 20,
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Descrição',
+                        style: GoogleFonts.raleway(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.mainBlue,
+                          fontSize: 20,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    "${store.product.price}",
-                    style: GoogleFonts.raleway(
-                      color: CustomColors.mainBlue,
-                      fontSize: 20,
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "${store.product.description}",
+                        style: GoogleFonts.raleway(
+                          color: CustomColors.mainBlue,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Preço',
+                        style: GoogleFonts.raleway(
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.mainBlue,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "R\$ ${store.product.price}",
+                        style: GoogleFonts.raleway(
+                          color: CustomColors.mainBlue,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 30),
@@ -127,7 +173,7 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 80),
+                padding: EdgeInsets.only(top: 20),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: CircularButton(
@@ -137,7 +183,7 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
                         slug: store.product.slug.toString(),
                       );
                     },
-                    text: "Baixar código QR",
+                    text: "Baixar código",
                   ),
                 ),
               ),

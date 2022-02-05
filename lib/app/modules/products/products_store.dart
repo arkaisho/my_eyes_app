@@ -143,10 +143,7 @@ abstract class _ProductsStoreBase with Store {
   Future deleteProduct(BuildContext context, {required String slug}) async {
     loading = true;
     try {
-      print('deletando');
-      print(slug);
       await api.deleteProduct(slug);
-      print('deletado');
       this.productList.removeWhere((product) => product.slug == slug);
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(

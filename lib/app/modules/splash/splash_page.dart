@@ -55,12 +55,10 @@ class SplashPageState extends State<SplashPage> {
         ),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              CustomColors.mainBlue,
-              Colors.white,
-            ],
+            colors: [Color(0xFF324A59), Color(0xFF3FBCF1)],
+            stops: [0, 1],
+            begin: AlignmentDirectional(1, -1),
+            end: AlignmentDirectional(-1, 1),
           ),
         ),
       ),
