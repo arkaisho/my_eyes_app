@@ -180,7 +180,8 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
                     onTap: () {
                       store.downloadQrCode(
                         context,
-                        slug: store.product.slug.toString(),
+                        bytes: base64Decode(
+                            store.product.base_64_qr_code.toString()),
                       );
                     },
                     text: "Baixar código",

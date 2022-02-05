@@ -24,6 +24,10 @@ dependencies:
   build_runner: 2.1.2
   slidy: 3.2.2+2
   fluttertoast: 8.0.7
+  path_provider: ^2.0.8
+  share_plus: ^3.0.4
+  flutter_tts: ^3.3.3
+  qr_code_scanner: ^0.6.1
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:mobx/mobx.dart';
 import 'package:my_eyes/app/modules/home/datasource/home_api.dart';
 
@@ -7,13 +8,15 @@ class HomeStore = HomeStoreBase with _$HomeStore;
 
 abstract class HomeStoreBase with Store {
   final HomeApi api;
+  FlutterTts flutterTts = FlutterTts();
 
-  HomeStoreBase(this.api);
+  HomeStoreBase(this.api) {
+    flutterTts.awaitSpeakCompletion(true);
+    flutterTts.setLanguage("pt-BR");
+  }
 
-  @observable
-  String result = "Click on the button to make a request";
-
-  Future getTodos() async {
-    result = (await api.getTodos()).toString();
+  Future speak(String text) async {
+    await flutterTts.stop();
+    await flutterTts.speak(text);
   }
 }
