@@ -1,10 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:mobx/mobx.dart';
 import 'package:my_eyes/app/models/product.dart';
 import 'package:my_eyes/app/modules/authentication/authentication_store.dart';
 import 'package:my_eyes/app/modules/products/datasources/products_api.dart';
 import 'package:my_eyes/app/utils/error_messager.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 part 'products_store.g.dart';
 
@@ -14,7 +20,12 @@ abstract class _ProductsStoreBase with Store {
   final ProductsApi api;
   final AuthenticationStore authenticationStore = Modular.get();
 
-  _ProductsStoreBase(this.api);
+  FlutterTts flutterTts = FlutterTts();
+
+  _ProductsStoreBase(this.api) {
+    flutterTts.awaitSpeakCompletion(true);
+    flutterTts.setLanguage("pt-BR");
+  }
 
   @observable
   Product product = Product();
@@ -164,14 +175,22 @@ abstract class _ProductsStoreBase with Store {
 
   // create a action to download the qr code pdf
   @action
-  Future downloadQrCode(BuildContext context, {required String slug}) async {
+  Future downloadQrCode(
+    BuildContext context, {
+    required Uint8List bytes,
+  }) async {
     loading = true;
     try {
-      var response = await api.downloadQrCode(slug);
-      final bytes = response.data;
-      // String dir = (await getApplicationDocumentsDirectory()).path;
-      // File file = new File('$dir/$filename');
-      // await file.writeAsBytes(bytes);
+      String filePath =
+          "${(await getTemporaryDirectory()).path}/qr_code${DateTime.now().millisecondsSinceEpoch}.jpg";
+
+      File savedFile = File(filePath);
+      savedFile.writeAsBytesSync(bytes);
+
+      await Share.shareFiles(
+        [savedFile.path],
+        text: "Qr Code do " + product.name.toString(),
+      );
 
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -184,9 +203,14 @@ abstract class _ProductsStoreBase with Store {
       showMessageError(
         context: context,
         error: e,
-        defaultActionText: "Error ao baixar QR-Code",
+        defaultActionText: e.toString(),
       );
     }
     loading = false;
+  }
+
+  Future speak(String text) async {
+    await flutterTts.stop();
+    await flutterTts.speak(text);
   }
 }

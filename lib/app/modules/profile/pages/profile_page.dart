@@ -17,14 +17,14 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   final ProfileStore store = Modular.get();
-  String name = "...";
+  String username = "...";
   String email = "...";
 
   @override
   void initState() {
     store.me().then((response) {
       setState(() {
-        this.name = response['username'].toString();
+        this.username = response['username'].toString();
         this.email = response['email'].toString();
       });
     });
@@ -94,7 +94,7 @@ class ProfilePageState extends State<ProfilePage> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                               child: Text(
-                                name,
+                                username,
                                 style: GoogleFonts.raleway(
                                   color: Color(0xFF090F13),
                                   fontSize: 24,

@@ -80,16 +80,14 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(20, 40, 20, 0),
-              child: Expanded(
-                child: CircularButton(
-                  text: "Enviar",
-                  onTap: () async {
-                    await store.recoverPassword(
-                      context,
-                      email: emailController.text,
-                    );
-                  },
-                ),
+              child: CircularButton(
+                text: "Enviar",
+                onTap: () async {
+                  await store.recoverPassword(
+                    context,
+                    email: emailController.text,
+                  );
+                },
               ),
             ),
           ],
