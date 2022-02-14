@@ -9,6 +9,7 @@ import 'package:my_eyes/app/shareds/custom_text_form_field.dart';
 
 class ProductEditionPage extends StatefulWidget {
   const ProductEditionPage({Key? key}) : super(key: key);
+
   @override
   ProductEditionPageState createState() => ProductEditionPageState();
 }
@@ -20,10 +21,14 @@ class ProductEditionPageState extends State<ProductEditionPage> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    nameController.text = store.product.name.toString();
+    priceController.text = store.product.price.toString();
+    descriptionController.text = store.product.description.toString();
   }
 
   @override
@@ -54,60 +59,82 @@ class ProductEditionPageState extends State<ProductEditionPage> {
       body: Observer(builder: (context) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Stack(
+          child: Column(
             children: [
-              Column(
-                children: [
-                  Container(height: 50),
-                  CustomTextFormField(
-                    controller: nameController,
-                    hintText: "Nome do produto",
-                    prefixIcon: Icon(
-                      Icons.text_fields,
-                      color: CustomColors.mainBlue,
-                    ),
-                  ),
-                  CustomTextFormField(
-                    controller: priceController,
-                    hintText: "Preço",
-                    prefixIcon: Icon(
-                      Icons.attach_money,
-                      color: CustomColors.mainBlue,
-                    ),
-                  ),
-                  CustomTextFormField(
-                    controller: descriptionController,
-                    hintText: "Descrição",
-                    prefixIcon: Icon(
-                      Icons.list,
-                      color: CustomColors.mainBlue,
-                    ),
-                  ),
-                  CustomTextFormField(
-                    controller: categoryController,
-                    hintText: "Categoria",
-                    prefixIcon: Icon(
-                      Icons.category,
-                      color: CustomColors.mainBlue,
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                bottom: 30,
-                left: 30,
-                right: 30,
-                child: Row(
+              Form(
+                key: formKey,
+                child: Column(
                   children: [
-                    Expanded(
-                      child: CircularButton(
-                        text: "Salvar",
-                        onTap: () async {},
+                    Container(height: 50),
+                    CustomTextFormField(
+                      controller: nameController,
+                      hintText: "Nome do produto",
+                      prefixIcon: Icon(
+                        Icons.text_fields,
+                        color: CustomColors.mainBlue,
                       ),
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return 'Por favor, preencha o nome do produto';
+                        return null;
+                      },
+                    ),
+                    CustomTextFormField(
+                      controller: priceController,
+                      hintText: "Preço",
+                      prefixIcon: Icon(
+                        Icons.attach_money,
+                        color: CustomColors.mainBlue,
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return 'Por favor, preencha o preço do produto';
+                        return null;
+                      },
+                    ),
+                    CustomTextFormField(
+                      controller: descriptionController,
+                      hintText: "Descrição",
+                      prefixIcon: Icon(
+                        Icons.list,
+                        color: CustomColors.mainBlue,
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return 'Por favor, preencha a descrição do produto';
+                        return null;
+                      },
                     ),
                   ],
                 ),
-              )
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    store.loading
+                        ? CircularProgressIndicator()
+                        : Expanded(
+                            child: CircularButton(
+                              text: "Salvar",
+                              onTap: () async {
+                                if (formKey.currentState!.validate()) {
+                                  await store.updateProduct(
+                                    context,
+                                    id: store.product.id!,
+                                    slug: store.product.slug.toString(),
+                                    name: nameController.text,
+                                    price: priceController.text,
+                                    description: descriptionController.text,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                  ],
+                ),
+              ),
             ],
           ),
         );

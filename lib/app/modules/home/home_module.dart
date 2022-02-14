@@ -15,7 +15,15 @@ class HomeModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => HomePage()),
-    ModuleRoute("\login", module: AuthenticationModule()),
+    ChildRoute(
+      Modular.initialRoute,
+      child: (_, args) => HomePage(),
+      transition: TransitionType.fadeIn,
+    ),
+    ModuleRoute(
+      "\login",
+      module: AuthenticationModule(),
+      transition: TransitionType.fadeIn,
+    ),
   ];
 }

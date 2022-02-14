@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:my_eyes/app/modules/authentication/datasources/authentication_api.dart';
 import 'package:my_eyes/app/utils/authentication.dart';
+import 'package:my_eyes/app/utils/error_messager.dart';
 
 part 'authentication_store.g.dart';
 
@@ -11,6 +12,7 @@ class AuthenticationStore = _AuthenticationStoreBase with _$AuthenticationStore;
 
 abstract class _AuthenticationStoreBase with Store {
   final AuthenticationApi api;
+
   _AuthenticationStoreBase(this.api);
 
   @observable
@@ -30,27 +32,14 @@ abstract class _AuthenticationStoreBase with Store {
       });
       await Authentication.saveToken(response.data['access'].toString());
       if (await Authentication.authenticated())
-        Modular.to.pushNamed("/products");
+        Modular.to.pushReplacementNamed("/products");
     } catch (e) {
-      if (e.runtimeType == DioError) {
-        if ((e as DioError).response!.statusCode == 401) {
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Credenciais inválidas."),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Erro ao fazer login."),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao realizar login",
+        onlyDefault: true,
+      );
     }
     loading = false;
   }
@@ -59,16 +48,21 @@ abstract class _AuthenticationStoreBase with Store {
   Future register(
     BuildContext context, {
     required String email,
+    required String name,
     required String username,
     required String password,
     required String confirmPassword,
   }) async {
+    loading = true;
     try {
       await api.register({
-        "username": username,
-        "email": email,
-        "password": password,
-        "re_password": confirmPassword,
+        "user": {
+          "name": name,
+          "username": username,
+          "email": email,
+          "password": password,
+          "re_password": confirmPassword,
+        }
       });
       Modular.to.pop();
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -79,14 +73,13 @@ abstract class _AuthenticationStoreBase with Store {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Erro ao fazer login."),
-          backgroundColor: Colors.red,
-        ),
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao realizar cadastro",
       );
     }
+    loading = false;
   }
 
   @action
@@ -98,6 +91,7 @@ abstract class _AuthenticationStoreBase with Store {
       await api.recoverPassword({
         "email": email,
       });
+      Modular.to.pop();
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -106,13 +100,22 @@ abstract class _AuthenticationStoreBase with Store {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Erro ao tentar recuperar a senha."),
-          backgroundColor: Colors.red,
-        ),
+      showMessageError(
+        context: context,
+        error: e,
+        defaultActionText: "Error ao recuperar senha",
       );
+    }
+  }
+
+  @action
+  Future me() async {
+    try {
+      final token = await Authentication.getToken();
+      var response = await api.me({'AUTHOZIRATION': 'JWT ' + token!});
+      return response.data;
+    } catch (e) {
+      return null;
     }
   }
 }
