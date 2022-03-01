@@ -9,7 +9,7 @@ part 'authentication_api.g.dart';
 abstract class AuthenticationApi {
   factory AuthenticationApi(Dio dio, {String? baseUrl}) = _AuthenticationApi;
 
-  @POST("/api/v1/shops/save/")
+  @POST("/api/v1/shops")
   @Header(JSON_HEADER)
   Future<HttpResponse> register(@Body() Map<String, dynamic> body);
 
