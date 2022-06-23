@@ -22,12 +22,11 @@ dependencies:
   json_serializable: 4.1.4
   dio: 4.0.3
   build_runner: 2.1.2
-  slidy: 3.2.2+2
   fluttertoast: 8.0.7
-  path_provider: ^2.0.8
-  share_plus: ^3.0.4
-  flutter_tts: ^3.3.3
-  qr_code_scanner: ^0.6.1
+  path_provider: 2.0.11
+  share_plus: 4.0.9
+  flutter_tts: 3.4.0
+  qr_code_scanner: 1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -40,12 +39,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - 'lib/app/assets/images/logo.png'
+    - "lib/app/assets/images/logo.png"
 
 flutter_icons:
-  image_path: 'lib/app/assets/images/logo.png'
+  image_path: "lib/app/assets/images/logo.png"
   android: true
   ios: true
-
-scripts:
-  mobx: flutter pub run build_runner build --delete-conflicting-outputs

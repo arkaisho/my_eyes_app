@@ -3,7 +3,6 @@ import 'package:my_eyes/app/modules/products/pages/product_creation_page.dart';
 import 'package:my_eyes/app/modules/products/pages/product_details_page.dart';
 import 'package:my_eyes/app/modules/products/pages/product_edition_page.dart';
 import 'package:my_eyes/app/modules/products/pages/products_page.dart';
-import 'package:my_eyes/app/modules/products/pages/qr_code_page.dart';
 import 'package:my_eyes/app/modules/products/products_store.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:my_eyes/app/utils/dio_config.dart';

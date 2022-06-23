@@ -162,10 +162,14 @@ class SignupPageState extends State<SignupPage> {
                                     color: CustomColors.mainBlue,
                                   ),
                                   validator: (value) {
-                                    if (value!.isEmpty)
+                                    if (value!.isEmpty) {
                                       return 'confirme sua senha!';
-                                    if (value != passwordController.text)
+                                    }
+                                    if (value != passwordController.text) {
                                       return 'As senhas não coincidem!';
+                                    } else {
+                                      return null;
+                                    }
                                   },
                                 ),
                               ),
@@ -181,7 +185,7 @@ class SignupPageState extends State<SignupPage> {
                                             ? CircularProgressIndicator()
                                             : Expanded(
                                                 child: CircularButton(
-                                                  text: "Cadastro",
+                                                  text: "Cadastrar",
                                                   onTap: () async {
                                                     if (formKey.currentState!
                                                         .validate()) {

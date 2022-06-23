@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_eyes/app/modules/home/home_store.dart';
-import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -7,10 +9,12 @@ showMessageError({
   required String defaultActionText,
   bool onlyDefault = false,
 }) {
+  log(error.toString());
   ScaffoldMessenger.of(context).clearSnackBars();
-  if (error.runtimeType == DioError &&
-      !onlyDefault &&
-      (error as DioError).response != null) {
+
+  if (error.runtimeType == DioError && !onlyDefault) {
+    log(error.error.toString());
+    log(error.response.toString());
     switch ((error).response!.statusCode.toString()) {
       case "401":
         ScaffoldMessenger.of(context).showSnackBar(

@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
-import 'package:my_eyes/app/shareds/custom_colors.dart';
 import 'package:my_eyes/app/utils/authentication.dart';
 
 class SplashPage extends StatefulWidget {
