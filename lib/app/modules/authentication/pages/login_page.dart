@@ -3,7 +3,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:my_eyes/app/modules/authentication/authentication_store.dart';
-import 'package:my_eyes/app/modules/authentication/pages/page.dart';
 import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 import 'package:my_eyes/app/shareds/custom_text_form_field.dart';
@@ -129,13 +128,14 @@ class LoginPageState extends State<LoginPage> {
                                                           if (formKey
                                                               .currentState!
                                                               .validate()) {
-                                                            Navigator.push(
+                                                            await store.login(
                                                               context,
-                                                              MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        const ShopPage(),
-                                                              ),
+                                                              username:
+                                                                  usernameController
+                                                                      .text,
+                                                              password:
+                                                                  passwordController
+                                                                      .text,
                                                             );
                                                           }
                                                         },
