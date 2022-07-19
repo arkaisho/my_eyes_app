@@ -68,7 +68,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             ? (value) {
                 return widget.validator!(value);
               }
-            : (value) {},
+            : (value) {
+                return null;
+              },
       ),
     );
   }

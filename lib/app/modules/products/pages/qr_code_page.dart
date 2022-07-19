@@ -2,7 +2,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:my_eyes/app/modules/products/products_store.dart';
-import 'package:my_eyes/app/shareds/circular_button.dart';
 import 'package:my_eyes/app/shareds/custom_bottom_navigation_bar.dart';
 import 'package:my_eyes/app/shareds/custom_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
