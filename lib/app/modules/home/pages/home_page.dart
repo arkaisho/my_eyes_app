@@ -17,7 +17,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   HomeStore store = Modular.get();
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? _controller;
-  String lastReadCode = "";
 
   @override
   void dispose() {
@@ -28,11 +27,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   @override
   void reassemble() {
     super.reassemble();
-    if (Theme.of(context).platform == TargetPlatform.android) {
-      _controller!.pauseCamera();
-    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
-      _controller!.resumeCamera();
-    }
+    _controller!.resumeCamera();
   }
 
   @override
@@ -56,8 +51,9 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 ),
               ),
             ),
-            onTap: () {
-              Modular.to.pushReplacementNamed("login");
+            onTap: () async {
+              await _controller!.pauseCamera();
+              await Modular.to.pushReplacementNamed("login");
             },
           )
         ],
@@ -84,24 +80,13 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   void _onQRViewCreated(QRViewController controller) {
     this._controller = controller;
     controller.scannedDataStream.listen(
-      (scanData) {
-        setState(
-          () async {
-            if (scanData.code.toString().compareTo(lastReadCode) != 0) {
-              await controller.pauseCamera();
-              lastReadCode = scanData.code.toString();
-              store.speak(scanData.code.toString()).then((value) {
-                lastReadCode = "";
-              });
-              await Future.delayed(Duration(seconds: 1));
-              await controller.resumeCamera();
-            } else {
-              await controller.pauseCamera();
-              await Future.delayed(Duration(seconds: 1));
-              await controller.resumeCamera();
-            }
-          },
-        );
+      (scanData) async {
+        if (scanData.code.toString().compareTo(store.lastReadCode) != 0 &&
+            store.canReadAgain) {
+          store.lastReadCode = scanData.code.toString();
+          store.speak(scanData.code.toString());
+        }
+        store.lastReadedTime = DateTime.now();
       },
     );
   }
